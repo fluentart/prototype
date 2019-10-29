@@ -1,3 +1,68 @@
+# PROTOTYPE
+
+dev branch [v 5.1.0-beta](https://github.com/IoT-nxt/prototype/tree/dev):   
+[![Build Status](https://dev.azure.com/iotnxt/CustomDev/_apis/build/status/Prototype/CustomDev-Prototype?branchName=dev)](https://dev.azure.com/iotnxt/CustomDev/_build/latest?definitionId=255&branchName=dev)   
+
+master branch [v 5.0.43-prod](https://github.com/IoT-nxt/prototype/tree/master):   
+[![Build Status](https://dev.azure.com/iotnxt/CustomDev/_apis/build/status/Prototype/CustomDev-Prototype?branchName=master)](https://dev.azure.com/iotnxt/CustomDev/_build/latest?definitionId=255&branchName=master)   
+
+After a mayor refactor from 5.0 to 5.1 we are now entering dev testing and QA.   
+This should last until end of October 2019 giving us one month of polish and testing   
+before production release to `master` branch.
+
+# Getting started
+
+Ideally you should run your own instance, but if that is not an option or you just want to give it a try you can use our live server(s):
+
+Production: https://prototype.iotnxt.io   
+development: https://prototype.dev.iotnxt.io
+
+
+# Running your own instance:
+
+Ideally run linux. Ubuntu does fine.
+
+https://www.pluralsight.com/guides/typescript-react-getting-started   
+
+## 5.0 to 5.1 Migration notes:
+
+We now rely on mongodb change streams https://pusher.com/tutorials/mongodb-change-streams instead of redis. This is not set in stone, and dependant on 5.1 beta phase tests. To get change streams to work you have to set mongo into replica/sharded mode:
+
+Edit `mongod.conf` and add:
+
+```
+replication:
+  replSetName: "rs"
+```
+
+Restart the service with `sudo service mongod restart`
+
+Then open the mongo client by running:
+
+```
+mongo
+```
+
+You should see `rs:PRIMARY` if not then run:
+
+```
+rs.initiate()
+```
+
+You might notice that database object format has also changed and is now more consistent between the API and the storage format. You might experience workflow scripts need to migrate to the new data structure:
+
+```js
+// instead of:
+state.payload.data
+// now:
+state.data
+```
+
+Also `data` is optional on incoming packets.
+
+
+
+
 ![alt text](https://i.imgur.com/FpnXB3n.png)
 
 Live: https://prototype.iotnxt.io  
@@ -37,6 +102,12 @@ git clone https://github.com/IoT-nxt/prototype.git
 
 You'll need to install [Node.js](https://nodejs.org/en/) and [MongoDB](https://www.mongodb.com/download-center/community) as a minimum.
 
+## mongod service autostart:
+
+```
+systemctl enable mongod.service
+```
+
 Useful additional tools include [Visual Studio Code](https://code.visualstudio.com/),
 [Robo 3T](https://robomongo.org/),
 
@@ -64,8 +135,20 @@ npm run build       # or build for production
 
 ## _Step 3_ **_Run the backend server_**
 
+Install [nodemon](https://nodemon.io/) globally (if server filewatch is needed)
 ```sh
-cd build
+npm install -g nodemon
+```
+Run the server start command
+
+```sh
+npm run watchserver
+```
+
+or
+
+```sh
+cd build/server
 node main.js        # runs the server
 
 # or even better, auto restart on file changes:
@@ -74,7 +157,7 @@ nodemon main.js     # npm i nodemon -g
 
 Go to [http://localhost:8080/](http://localhost:8080/) and log in with the default account:
 
-       email: admin@localhost.com
+    email: admin@localhost.com
     password: admin
 
 # Configuration
@@ -542,3 +625,18 @@ sudo journalctl -u prototype -f
 
 source: https://www.axllent.org/docs/view/nodejs-service-with-systemd/
 
+
+## 5.1 BETA Service worker build:
+
+```
+cd client
+npm run buildsw
+```
+
+
+## To create a local ssl certificate you can use:
+
+
+```
+openssl req -nodes -new -x509 -keyout server.key -out server.cert
+```

@@ -1,0 +1,22 @@
+{
+  "name": "prototype_api",
+  "version": "1.0.0",
+  "description": "reference implementation http/websocket api to opensource prototype stack",
+  "main": "index.js",
+  "scripts": {
+    "watch": "tsc --sourcemap --w --lib es2015 ./src/main.ts ./src/test.ts --outDir ./build",
+    "test": "mocha --exit ./build/test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/lodash": "^4.14.138",
+    "@types/node": "^12.7.5",
+    "@types/request": "^2.48.3",
+    "lodash": "^4.17.15",
+    "mocha": "^6.2.0",
+    "request": "^2.88.0",
+    "ws": "^7.1.2"
+  }
+}

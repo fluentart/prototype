@@ -1,0 +1,11 @@
+{
+    "ssl": true,
+    "sslOptions": {
+        "certPath": "/etc/letsencrypt/live/8bo.org/fullchain.pem",
+        "keyPath": "/etc/letsencrypt/live/8bo.org/privkey.pem"
+    },
+    "env": "8bo.org",
+    "httpPort": 80,
+    "httpsPort": 443,
+    "mongoConnection": "mongodb://localhost:27017/8bo"
+}
